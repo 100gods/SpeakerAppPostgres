@@ -1,0 +1,107 @@
+SpeakerIdentApp - Text-Independent (TI) Speaker Identification Application
+--------------------------------------------------------------------------
+
+COPYRIGHT
+---------
+
+$Header: /cvsroot/marf/apps/SpeakerIdentApp/README,v 1.9 2006/01/15 20:51:53 mokhov Exp $
+
+Copyright (C) 2002 - 2006 The MARF Research and Development Group
+
+<http://marf.sf.net>
+
+The application is distributed under the same terms as
+the MARF itself. In short: it's a BSD-style licence.
+See COPYRIGHT for details.
+
+GENERALITIES
+------------
+
+NOTE: This demo application utilizes the MARF framework.
+      You have to have the latest marf-<version>.jar file, which
+      you can obtain from <http://marf.sf.net/>, and put it
+      somewhere under your CLASSPATH, EXTDIRS (Java's
+      extesions directory), or application itself.
+      The -bin and -bundle distros have the .jar file within them,
+      but it may not be the latest). You will
+      need JDK/JRE 1.4 or higher for it to function properly.
+
+This is (still) a console-based application. GUI is still being
+planned out.
+
+For the fresh install you need to retrain the system before
+you can start feeding testing samples into it. If you
+work with our sample set, to save some time you may download our
+trainin-sets tarball with pre-trained data.
+
+
+BUILDING FROM SOURCES
+---------------------
+
+(This does not apply to you if you downloaded the binary-only distro.)
+
+
+UNIXen
+
+It is assumed you have a GNU-style make, which comes
+under some UNIXen under the name gmake.
+
+Type:
+
+$ make
+
+	to build it
+
+$ make train-run
+
+	to build, train the system, and then test
+
+$ make test-run
+
+	to just batch-test it w/o retraining
+
+$ make javadoc-html
+
+	to make a javadoc-style reference to the application's code;
+	the generated documents will be placed under the ./html subdirectory
+
+$ make clean
+
+	to remove all .class files
+
+$ make maintainer-clean
+
+	to also remove output, text, ppm, log, diff, and some
+	other temp. developer files
+
+NOTE: You may need to tweak the Makefile for your specific preferences.
+
+
+Windows
+
+For JBuilder users there is the SpeakerIdentApp.jpx project
+file, you can use that if you are unfamiliar with
+the make utility or suffer from its unavailability.
+
+
+DOCUMENTATION
+-------------
+
+Besides this README, ChangeLog, and the javadoc reference,
+this application doesn't have any documentation within itself.
+It's documented however along with the MARF framework itself,
+and the MARF's report-manual. Grab it's PDF version from either
+MARF's -doc distro or the our web page: <http://marf.sf.net>.
+
+
+CONTACT
+-------
+
+	Report bugs to:
+		<marf-bugs@lists.sf.net>
+
+	Comments, ideas, contributions, etc. direct to:
+		<marf-devel@lists.sf.net>
+		<mokhov@users.sf.net>
+
+EOF

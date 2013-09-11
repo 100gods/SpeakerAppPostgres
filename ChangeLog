@@ -1,0 +1,1100 @@
+2006-02-18 11:11  mokhov
+
+	* Makefile: Add ChangeLogs to all the apps. Add makefile rule
+	change-log to generate with less effort. Add TOOLSDIR variable as
+	it the directory now referenced more than once. Make sure the
+	ChangeLog is added to both -bin and -src distros.
+
+2006-02-13 01:29  mokhov
+
+	* Makefile: Implement automatic .tex usage generation by all the
+	apps for future inclusion into the manual automatically. Adjust
+	Makefiles and correct some minor usage info.
+
+2006-01-22 19:03  mokhov
+
+	* SpeakerIdentApp.java: Fine-tune a bit more NeuralNetwork
+	parameters based on the experiments with the revived TestNN to
+	produce a better recognition rate. Adjust epoch testing part in
+	error updates to be in the scale of the minimum error. Though this
+	is still imprecise, but looks more appropraite as a scale.  Update
+	a couple of comments.
+
+2006-01-21 23:36  mokhov
+
+	* SpeakerIdentApp.java: Add revision to @version.
+
+2006-01-15 15:51  mokhov
+
+	* Makefile, README, testing.bat, testing.sh: Consistently space out
+	copyright years.
+
+2006-01-08 09:47  mokhov
+
+	* SpeakersIdentDb.java: Add recommended serialVersionUIDs. Apply
+	more unapplied conventions and remove conflicting variable name.
+
+2006-01-03 02:53  mokhov
+
+	* Makefile, README, testing.bat, testing.sh: Perform first round of
+	copyright year updates to bump to 2006.
+
+2006-01-02 14:45  mokhov
+
+	* testing.bat: Similarly to testing.sh, enable assertions and
+	reserve more memory for JVM.
+
+2006-01-02 14:17  mokhov
+
+	* Makefile: Add compilation of the .bz2 packages and computation of
+	the .md5 checksums. Overall, clean up the Makefile a bit.
+
+2005-12-31 23:24  mokhov
+
+	* testing.sh: Instruct JVM to use 512Mb max Java partition of
+	memory so that non-server machines no longer choke on OutOfMemory
+	errors with the default 64Mb.
+
+2005-12-30 00:54  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, testing.bat,
+	testing.sh: This mega commit includes a few large fixes and closes
+	up a long standing bug #1273717. Specifically, SpeakerIdentApp has
+	now the option "-aggr" to invoke the recently implemented
+	FeatureExtractionAggregator for testing (for now as concatenation
+	FFT and LPC until better alternatives are available). Debug
+	FeatureExtractionAggregator so it actually works. This includes
+	resetting the module parameters back to itself instead of just
+	zeroing out because when MARF runs in the batch mode in the same
+	JVM, we were able to run through only once successfully. Fix
+	addition of the current thread to its group upon thread
+	construction. Improve handling of the sub-module parameters with
+	proper typechecks for the future.  For all this to work, especially
+	for cloning of the Preprocessing modules, the default constructors
+	had to be made public. Did not entirely estimate consequences of
+	this.  The actual results of coupling FFT+LPC are rather pitiful at
+	this point (need to implement F0 for more fruitful results).
+	
+	Re-synchronize MARF so that no deadlocks happen when the main
+	thread calls its synchronized method and some other thread does the
+	same (as in FeatureExtractionAggregator) causing both to hang.
+	Instead make the synchronization a tad bit more granular in MARF in
+	train(), recognize(), and startRecognitionPipeline() based on the
+	objects being manipulated. Add a new method of checkSettings() and
+	relax synchronization requirements on the version retrieval methos
+	as there are no mutable data structures in there. This was deemed
+	to be the source of the bug #1273717, but turned out to be
+	unrelated and so is Debug's synchronization is fine.
+	
+	Now, the bug #1273717 is finally fixed, and the culprit turned out
+	to be the Sample's class toString() method -- specifically
+	inefficient implementation of String concatenation with "+".
+	Replace all the operations in there with the StringBuffer instead
+	to fix the problem.
+	
+	Clean up lots of code a long the way in various places along the
+	way for names, error handling, and comments.
+
+2005-12-07 19:47  mokhov
+
+	* README, manifest.mf, testing.sh: Bulk-rename remaining entries of
+	"The MARF Development Group" to "The MARF Research and Development
+	Group".
+
+2005-11-29 20:19  mokhov
+
+	* retrain.lnk: Update the retrain shortcut with new options.
+
+2005-11-29 20:18  mokhov
+
+	* SpeakersIdentDb.java: Convert System.out.println() to
+	Debug.debug().
+
+2005-10-15 19:56  mokhov
+
+	* Makefile: Update group's name with "Research".
+
+2005-09-25 19:32  mokhov
+
+	* SpeakerIdentApp.java: Add a file name to the display similarly
+	the way it was in the scripts.
+
+2005-09-25 19:05  mokhov
+
+	* SpeakerIdentApp.java: Add date/time information.
+
+2005-09-25 18:50  mokhov
+
+	* SpeakerIdentApp.java: Correct a bug of assigning initial expected
+	ID to 0 instead of -1 that cause avoiding to look up one from the
+	db. Add some cosmetic works.
+
+2005-09-24 23:29  mokhov
+
+	* SpeakerIdentApp.java: Document new members.
+
+2005-09-24 16:30  mokhov
+
+	* testing.bat, testing.sh: Adjust testing scripts to use the new
+	--batch-ident option.
+
+2005-09-24 16:08  mokhov
+
+	* SpeakerIdentApp.java: Implement handling of the --single-train
+	option to allow training on a single file (e.g. add a new sample to
+	the training set without retraining the rest of the
+	samples/clusters). Refactor the common code into the new train()
+	method. In file checks, insist on the fact that something ends with
+	".wav" must also be a regular file to improve robustness.
+
+2005-09-24 15:18  mokhov
+
+	* SpeakerIdentApp.java: Implement the --batch-ident option to be
+	able to run the app againt a directory of files to indetify,
+	instead of just a single file.	This should help performance-wise
+	because it avoids starting up a new JVM for each file to identify
+	for each permutation of the configuration parameters. As a result
+	of implementation, refactor some common code into the new ident()
+	and getConfigString() methods.
+
+2005-09-23 21:27  mokhov
+
+	* SpeakerIdentApp.java: Complete new option processing machinery
+	applied to all aspects of the app. Resolve the nuances related to
+	extracting a file or directory name along with the expected speaker
+	ID.
+
+2005-09-19 23:07  mokhov
+
+	* SpeakerIdentApp.java: Significantly advance new option
+	processing. Major options are now part of the same option
+	processing repertoire. Add switches setCustomConfig() to allow for
+	option arguments and correct handling of ModuleParams across all
+	types of modules. Clean up code and comments a bit. Add missing
+	"--best-score" option to the usage(). Only thing that remains to
+	address is the handing of valid "invalid" options for the file/dir
+	name and/or the expected ID.
+
+2005-09-18 13:57  mokhov
+
+	* SpeakerIdentApp.java: Begin using OptionProcessor. Start
+	implementation of the --batch-ident and --single-train options. The
+	new-code-so-far compiles but barely operational.
+
+2005-09-17 21:45  mokhov
+
+	* SpeakerIdentApp.java: Minor cosmetic improvements.
+
+2005-08-30 18:36  mokhov
+
+	* testing.bat: Fix a bug in argument numbering for the TESTING case
+	to avoid "-nn" to appear with "-fft" and "-randfe" as they cause
+	out-of-memory errors in the current setup. Such bug did not exist
+	in TRAINING because the arguments are not shifted right to
+	accomodate a filename.
+
+2005-08-28 13:21  mokhov
+
+	* retrain.lnk: Add a Windows shortcut to testing.bat that supplies
+	the --retrain option and so it is possible just to start retraining
+	and the classification process on Windows just by double-clicking
+	on the shortcut.
+
+2005-08-27 19:03  mokhov
+
+	* testing.bat: Complete preliminary version of the testing.bat
+	equivalent of testing.sh.  Since M$ batch files don't have a notion
+	of procedures, a tmp .bat files for loops, training, and
+	identification are generated and used throughout the script. There
+	are a few other little kludges in place, but at least it is
+	something that works.
+
+2005-08-27 13:57  mokhov
+
+	* testing.sh: Re-add mistakingly removed testing.sh as a part of
+	.bat clean up.
+
+2005-08-27 13:41  susan_fan
+
+	* testing.sh: remove mistakingly added testing.sh file.
+
+2005-08-27 13:40  susan_fan
+
+	* class.bat, feat.bat: Romove mistakingly added .bat files that are
+	supposed to be generated.
+
+2005-08-27 13:32  susan_fan
+
+	* testing.sh: Remove mistakingly added .bat files that are supposed
+	to be generated.
+
+2005-08-27 13:17  susan_fan
+
+	* class.bat:  be called by feat.bat
+
+2005-08-27 13:09  susan_fan
+
+	* feat.bat:  be called by testing.bat
+
+2005-08-27 13:05  susan_fan
+
+	* testing.bat: Add feat.bat and class.bat files be called by
+	testing.bat. Not included "if" in training part and need to change
+	testing part.
+
+2005-08-23 23:23  mokhov
+
+	* speakers.txt: Add Shivani.
+
+2005-08-23 23:20  mokhov
+
+	* training-samples/: shivani1.wav, shivani10.wav, shivani11.wav,
+	shivani12.wav, shivani13.wav, shivani14.wav, shivani15.wav,
+	shivani2.wav, shivani3.wav, shivani4.wav, shivani6.wav,
+	shivani7.wav, shivani8.wav, shivani9.wav: Add training samples of
+	Shivani's voice.
+
+2005-08-23 23:20  mokhov
+
+	* testing-samples/shivani5.wav: Add a testing sample of Shivani's
+	voice.
+
+2005-08-23 20:39  mokhov
+
+	* Makefile: Force 1.4 sources for javac and javadoc. Fix a typo in
+	maintainer-clean.
+
+2005-08-23 20:37  mokhov
+
+	* Makefile: Make sure the SpeakerIdentApp.jar is washed away by the
+	maintainer-clean vacuum cleaner.
+
+2005-08-23 20:30  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Add '-endp' option to enable
+	the use of Endpoint in SpeakerIdentApp.
+
+2005-07-30 18:56  mokhov
+
+	* ChangeLog: Update ChangeLog for 0.3.0-devel-20050730.
+
+2005-07-03 18:17  mokhov
+
+	* manifest.mf: Remove DOS EOLs.
+
+2005-06-25 06:24  mokhov
+
+	* testing-samples/sx16.wav, training-samples/sx1.wav,
+	training-samples/sx10.wav, training-samples/sx11.wav,
+	training-samples/sx12.wav, training-samples/sx13.wav,
+	training-samples/sx14.wav, training-samples/sx15.wav,
+	training-samples/sx2.wav, training-samples/sx3.wav,
+	training-samples/sx4.wav, training-samples/sx5.wav,
+	training-samples/sx6.wav, training-samples/sx7.wav,
+	training-samples/sx8.wav, training-samples/sx9.wav: Add Shuxin's
+	voice samples. Forgot to add a long ago.
+
+2005-06-19 00:48  mokhov
+
+	* SpeakerIdentApp.java: Display 2nd best anyway, regardless whether
+	the expected speaker available or not. When not, don't count the
+	stats, just display.  Document the code a little more.
+
+2005-06-19 00:44  mokhov
+
+	* speakers.txt: Add Shuxin to the list of speakers. Remove
+	erroneous space and add testing sample.
+
+2005-06-04 16:19  mokhov
+
+	* SpeakerIdentApp.java: Apply coding conventions to some remnant
+	variables.
+
+2005-06-04 15:36  mokhov
+
+	* Makefile: Complete polishing distro targets making sure all stuff
+	is in and replacing .class files with .jar ones in -bin and
+	-bundle.
+
+2005-06-04 15:27  mokhov
+
+	* SpeakerIdentApp.java: Do not spill out the error message on
+	missing arguments, instead just display the usage information.
+	Re-arrange some code at the beginning a little.
+
+2005-06-03 23:12  mokhov
+
+	* Makefile: Add testing.bat to the distro.
+
+2005-06-03 23:05  mokhov
+
+	* Makefile: Prepare Makefile for the upcoming 0.3.0-devel release:
+	add new tarball for training sets, add COPYRIGHT and coding.html,
+	Eclipse project files, and correct marf.jar enclosure. Add
+	CLASSPATH to javadoc build so it also finds marf.jar and doesn't
+	complain. Clean up Makefile in general.
+
+2005-06-03 22:05  mokhov
+
+	* manifest.mf: Add manifest file for SpeakerIdentApp.
+
+2005-06-03 22:04  mokhov
+
+	* README: Update README a bit to reflect more the today's
+	0.3.0-devel situation.
+
+2005-06-03 22:01  mokhov
+
+	* SpeakerIdentApp.java: Correct comment about exit code.
+
+2005-06-03 21:53  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java: Perform some code
+	clean ups before 0.3.0-devel release.  Fix some formatting and
+	spelling errors. From SpeakersIdentDb remove strDbFile and
+	bConnected data members. The former is subsumed by StorageManager's
+	strFilename and the latter was moved to Database, where it seems to
+	belong. Apply some more coding conventions in places. Document a
+	little more.
+
+2005-06-01 22:50  mokhov
+
+	* SpeakerIdentApp.java: Replace usage of MARF.DEBUG with
+	Debug.enableDebug().
+
+2005-05-31 01:52  mokhov
+
+	* SpeakerIdentApp.java: Update usage() with the new options: -raw,
+	-minmax, and -diff.
+
+2005-05-24 23:56  mokhov
+
+	* SpeakersIdentDb.java: Expand imports and update some comments.
+
+2005-05-23 23:46  mokhov
+
+	* SpeakersIdentDb.java: Extend from marf.Storage.Database now that
+	we have it, and use StorageException instead of IOException or
+	Exception. Now we are one more step closer to integration of the
+	Database and StatsCollector code. Make use of Debug.debug() instead
+	of deperecated MARF.debug().
+
+2005-05-23 14:28  mokhov
+
+	* SpeakersIdentDb.java: Begin clean up for code migration to MARF.
+
+2005-05-22 11:35  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Add -raw, -minmax, and -diff
+	options. Document  the code a bit more. Replace some usage of
+	MARF.debug() with Debug.debug().
+
+2005-05-17 11:19  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Add new "-highpassboost" option
+	for the new Preprocessing module combo.  It works, but I am not
+	very happy with the results yet... Plus, the order for some reason
+	of including things matters, this will have to be fixed in MARF.
+
+2005-05-16 17:17  mokhov
+
+	* Makefile: Make sure we remove ~ backup files on maintainer-clean.
+
+2005-05-12 21:46  mokhov
+
+	* SpeakerIdentApp.java: Remove redundant import.
+
+2005-05-08 17:01  mokhov
+
+	* SpeakersIdentDb.java: Correct a corner-case bug of having a
+	single configuration for stats where the output result array had 1
+	row less than necessary. The original coding was bogus anyway as it
+	assumed to have as many rows as we have configurations, but there
+	should only be two -- for the 1st and 2nd guesses. Make
+	StatsPercentComparator a subclass of SortComparator which is
+	already a couple of months in the main MARF CVS. Also artificially
+	scale the compared values for not to miss .00 fractions. This will
+	have to be reviewed.  Evetually this comparator will likely be also
+	moved to MARF once StatisticCollector gets implemented.  Clean up
+	imports. Clean up and improve javadoc comments.  Redirect some
+	error messages to System.err.
+
+2005-05-08 16:55  mokhov
+
+	* SpeakerIdentApp.java: Simply queirying for speakers' IDs and make
+	less function calls.  Perform some code clean up. Redirect
+	error-related messages to System.err in few places. Add the "-h"
+	option as a short for "--help" that was liste in the Usage
+	information, but was never actually accepted.  This commit confirms
+	that the app works again with the current MARF
+	ResultSet/Result-related fixes.  Clean up imports. Clean up and
+	improve javadoc comments.
+
+2005-05-08 16:51  mokhov
+
+	* Makefile: Make sure we remove all stats-related-generated files
+	on maintainer-clean as well as the *.gzbin files.
+
+2005-05-04 18:33  mokhov
+
+	* SpeakerIdentApp.java: Update the application to use the new
+	ResultSet API of Classification.  This is a very incompatible
+	change to the API, so this application version requires 0.3.0 of
+	marf of more. Needs rigorous testing.
+	
+	Massage comments in places.
+
+2005-04-23 16:43  mokhov
+
+	* .classpath, .project: Add Eclipse's project files to our apps.
+	They are all set dependent on the MARF project.
+
+2005-04-02 17:49  mokhov
+
+	* Makefile, testing.sh: Fix path to /bin/tcsh and correct Makefile
+	to work again.
+
+2005-04-01 15:09  mokhov
+
+	* testing.sh: Clean up classpath and extdirs. Update copyright
+	year.
+
+2003-07-17 01:41  mokhov
+
+	* .cvsignore: Add .cvsignore to keep less annoyoance out.
+
+2003-07-16 19:21  mokhov
+
+	* SpeakerIdentApp.jpx: Update JBuilder project files with JBuilder
+	8.
+
+2003-04-21 16:18  mokhov
+
+	* speakers.txt: Fix speaker information: list correct testing
+	sample file for Ying Lu and update speaker contribution table.
+
+2003-04-21 00:34  mokhov
+
+	* testing.bat: Add initial attempt of a BAT file for testing under
+	Windoze environment.
+
+2003-04-19 21:49  mokhov
+
+	* speakers.txt, testing-samples/cl_he12.wav,
+	training-samples/cl_he1.wav, training-samples/cl_he10.wav,
+	training-samples/cl_he11.wav, training-samples/cl_he13.wav,
+	training-samples/cl_he14.wav, training-samples/cl_he15.wav,
+	training-samples/cl_he2.wav, training-samples/cl_he3.wav,
+	training-samples/cl_he4.wav, training-samples/cl_he5.wav,
+	training-samples/cl_he6.wav, training-samples/cl_he7.wav,
+	training-samples/cl_he8.wav, training-samples/cl_he9.wav: Add
+	Chunlei He to our beautiful part of the speaker database.
+
+2003-04-17 16:41  mokhov
+
+	* speakers.txt, testing-samples/sfang7.wav,
+	training-samples/sfang1.wav, training-samples/sfang10.wav,
+	training-samples/sfang11.wav, training-samples/sfang12.wav,
+	training-samples/sfang13.wav, training-samples/sfang14.wav,
+	training-samples/sfang15.wav, training-samples/sfang2.wav,
+	training-samples/sfang3.wav, training-samples/sfang4.wav,
+	training-samples/sfang5.wav, training-samples/sfang6.wav,
+	training-samples/sfang8.wav, training-samples/sfang9.wav: Add
+	Shaozhen Fang to our speakers.
+
+2003-04-16 16:31  mokhov
+
+	* speakers.txt: Add Ying Lu to the speaker database.
+
+2003-04-16 16:19  mokhov
+
+	* training-samples/: yinglu10.wav, yinglu11.wav, yinglu12jp.wav,
+	yinglu13zh.wav, yinglu14.wav, yinglu15.wav, yinglu2.wav,
+	yinglu3.wav, yinglu4.wav, yinglu5.wav, yinglu6.wav, yinglu7.wav,
+	yinglu8.wav, yinglu9.wav: Add Ying Lu :-)
+
+2003-04-16 16:16  mokhov
+
+	* testing-samples/yinglu1.wav: Add Emily Ying Lu to the testing
+	set.
+
+2003-03-01 16:01  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, testing.sh: Greately
+	inhance stats reporting: stats are now sorted with the top rate
+	being at ... well ... the top. Imrove formatting to two digits
+	after (.). Properly report run #.  Add generation of the
+	stats-date.tex and best-score.tex to testing.sh for automatic
+	inclusion in the docs.	Add option --best-score that returns only
+	the best top score to STDOUT for the best-score.tex file.
+
+2003-03-01 15:58  mokhov
+
+	* speakers.txt: Update a filename for Ke -- ke8.wav was listed
+	twice.
+
+2003-02-28 21:56  mokhov
+
+	* speakers.txt, testing-samples/emily2.wav,
+	training-samples/emily1.wav, training-samples/emily10.wav,
+	training-samples/emily11.wav, training-samples/emily12.wav,
+	training-samples/emily13.wav, training-samples/emily14.wav,
+	training-samples/emily15.wav, training-samples/emily3.wav,
+	training-samples/emily4.wav, training-samples/emily5.wav,
+	training-samples/emily6.wav, training-samples/emily7.wav,
+	training-samples/emily8.wav, training-samples/emily9.wav: Add sweet
+	Emily.
+
+2003-02-26 16:26  mokhov
+
+	* speakers.txt, testing-samples/ke7.wav, training-samples/ke1.wav,
+	training-samples/ke10.wav, training-samples/ke11.wav,
+	training-samples/ke12.wav, training-samples/ke13.wav,
+	training-samples/ke14.wav, training-samples/ke15.wav,
+	training-samples/ke2.wav, training-samples/ke3.wav,
+	training-samples/ke4.wav, training-samples/ke5.wav,
+	training-samples/ke6.wav, training-samples/ke8.wav,
+	training-samples/ke9.wav: Add Ke Gong to the speaker database.
+
+2003-02-23 21:53  mokhov
+
+	* testing.sh: Cosmetic fixes and typos in comments.
+
+2003-02-23 21:41  mokhov
+
+	* Makefile, testing.sh: Update Makefile and testing.sh WRT timing
+	infotmtion to meansure run-time of a given test or the thing as a
+	whole. Fix some settings in EXTDIRS and CLASSPATH along the way for
+	testin.sh
+
+2003-02-23 21:39  mokhov
+
+	* speakers.txt: Fix format for the entry of my dad.
+
+2003-02-23 21:39  mokhov
+
+	* SpeakerIdentApp.java: Update message that reports that speaker
+	isnt found in the db for a given .wav file to be more helpful.
+
+2003-02-22 15:38  mokhov
+
+	* speakers.txt, testing-samples/alexandrm7.wav,
+	training-samples/alexandrm1.wav, training-samples/alexandrm10.wav,
+	training-samples/alexandrm11.wav, training-samples/alexandrm12.wav,
+	training-samples/alexandrm13.wav, training-samples/alexandrm14.wav,
+	training-samples/alexandrm15.wav, training-samples/alexandrm2.wav,
+	training-samples/alexandrm3.wav, training-samples/alexandrm4.wav,
+	training-samples/alexandrm5.wav, training-samples/alexandrm6.wav,
+	training-samples/alexandrm8.wav, training-samples/alexandrm9.wav:
+	Add my dad.
+
+2003-02-19 19:10  mokhov
+
+	* SpeakersIdentDb.java: Add verbose explanation when there's not
+	statistics but it was requested from the command line. Few comments
+	and update IOException to java.io.IOException thing.
+
+2003-02-19 19:08  mokhov
+
+	* Makefile: Playing with JFLAGS trying to make it more generic.
+
+2003-02-18 20:09  mokhov
+
+	* Makefile: More neat and clean makefile. Correct -extdirs if
+	marf-*.jar is within the app's dir.
+
+2003-02-17 16:40  mokhov
+
+	* ChangeLog: Update ChangeLog before release.
+
+2003-02-17 16:08  mokhov
+
+	* Makefile: Add -exdirs to JFLAGS
+
+2003-02-16 23:56  mokhov
+
+	* ChangeLog: Update ChangeLog WRT recent fixes.
+
+2003-02-16 21:23  mokhov
+
+	* SpeakerIdentApp.java: Backpatch epoch # for Nnet.
+
+2003-02-16 21:23  mokhov
+
+	* SpeakerIdentApp.java: Adjust epoch # to smth that am willing to
+	wait.  NNet's got three hidden layers, so it takes quite some time
+	to evaluate it all.
+
+2003-02-15 15:19  mokhov
+
+	* ChangeLog, Makefile, README, SpeakerIdentApp.java,
+	SpeakersIdentDb.java, testing.sh: Back-patch to 0.2.*: Improve the
+	build system a lot, WRT distros especially.  Also add missing files
+	to the CVS and distros. Update README and comments in the *.java
+	files. Add ChangeLog.  Fix the version check bug in the App. Make
+	testing.sh not to include combos -nn && (-fft || -randfe).  Boost
+	version to 0.2.1.
+
+2003-02-15 15:19  mokhov
+
+	* ChangeLog, Makefile, README, SpeakerIdentApp.java,
+	SpeakersIdentDb.java, testing.sh: Improve the build system a lot.
+	Now it's nice an clean.  Also add missing files to the CVS and
+	distros. Update README and comments in th e*.java files. Add
+	ChangeLog.  Fix the version check bug in the App. Make testing.sh
+	to not include combos -nn && (-fft || -randfe).  Boost version to
+	0.3.0.
+
+2003-02-14 23:18  mokhov
+
+	* speakers.txt: Fix spelling again,
+
+2003-02-14 22:53  mokhov
+
+	* speakers.txt: Two files were mispelled.
+
+2003-02-14 22:40  mokhov
+
+	* speakers.txt: Update speakers.txt with Talal's files.
+
+2003-02-14 22:35  mokhov
+
+	* testing-samples/talal7.wav, training-samples/talal1.wav,
+	training-samples/talal10.wav, training-samples/talal11.wav,
+	training-samples/talal12.wav, training-samples/talal13.wav,
+	training-samples/talal14.wav, training-samples/talal15.wav,
+	training-samples/talal2.wav, training-samples/talal3.wav,
+	training-samples/talal4.wav, training-samples/talal5.wav,
+	training-samples/talal6.wav, training-samples/talal8.wav,
+	training-samples/talal9.wav: 15 voice samples [14:1] of Talal
+	Al-Khoury
+
+2003-02-10 04:53  mokhov
+
+	* Makefile: Make distro.
+
+2003-02-08 11:50  mokhov
+
+	* SpeakerIdentApp.java: Add --help option.
+
+2003-02-05 15:27  mokhov
+
+	* testing.sh: Cosmetic updates: spelling in comments.
+
+2003-02-01 10:07  mokhov
+
+	* testing-samples/README, training-samples/README: State the
+	purpose of these directories as well as preserve their existance in
+	packaging w/o samples.
+
+2003-01-30 11:01  mokhov
+
+	* SpeakerIdentApp.java: Enhance reporting.
+
+2003-01-29 14:45  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Make SpeakerIdentApp
+	Mahalanobis DIstance-ware (-mah) option. Quick hack to apps' build
+	to remove *.diff files.
+
+2003-01-26 13:06  mokhov
+
+	* SpeakersIdentDb.java: To avoid NullPointerException if speaker w/
+	ID other than 0 but out of range is returned (.eg. by NNet), we
+	will handle it more gracefully by reporting instead of failing.
+
+2003-01-25 16:34  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Make the app
+	RandomClassification and BandpassFilter aware. Update usage().
+	Cosmetic and comments.	Updates to testing.sh.
+
+2003-01-18 14:12  mokhov
+
+	* Makefile, README, SpeakerIdentApp.java, testing.sh:
+	SpeakerIdentApp Update WRT MARF changes and cosmetical changes.  -
+	Makefile - README - -randfe option - testing.sh fix
+
+2003-01-14 00:09  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: Making SpeakerIdentApp
+	Minkowski Distance-aware
+
+2003-01-12 10:43  mokhov
+
+	* Makefile, README, SpeakersIdentDb.java, testing.sh: Most notable
+	is slightly sorted output for stats, which is sorta guaranteed to
+	hold regardlless the way the stats stored in the Hashtable. The
+	rest is cosmteic and there's also an attempt to streamline NNet,
+	but not yet :-(.  I'm not sure, but most probably after that I
+	won't do much for awhile -- new term, new worries...
+
+2003-01-10 02:26  mokhov
+
+	* SpeakerIdentApp.java: Build System for all the apps: Global
+	makefile in the apps module (/apps dir)  - Fixed all the sub
+	makefiles  - Made Test apps to compile again, but JUST compile, I
+	didn't test them Our main app - SpeakerIdentApp has a new option
+	--version that displays app's version as well as MARF's. There is
+	also version check in place to make sure the app is not being run
+	against old API ( < 0.2.0 )
+	
+	As of this commit MARF's and SpeakerIdentApp's versions are the
+	same, 0.2.0 but may diverge.
+
+2003-01-09 11:08  pwrslave
+
+	* SpeakersIdentDb.java: Corrected small typo in NOTICE...
+
+2003-01-09 02:15  mokhov
+
+	* SpeakersIdentDb.java: Per recent gripe from Jimmy: If the app is
+	attempted and .stats did not exist when identfying, it used to fail
+	with an exception, not gracefully :( Not it resets stats on
+	restore() if the file is not there.
+	
+	-s
+
+2003-01-05 15:25  mokhov
+
+	* Makefile, README, SpeakerIdentApp.java, SpeakersIdentDb.java,
+	testing.sh: Major changes (and minor too :)): - Got rid of
+	Build-training-set and dumping it in the app completely - Improved
+	otpions, comments, and error reporting - Makefile cleanup and
+	improvements, specifcially   make train-run and test-run work
+	proprely and invoke the testing.sh   script with appropriate
+	options - README -- documented a bit make usage - testing.sh script
+	improvements WRT new option and   stats reset once before the
+	training (and not on each trained   sample from the apps' loop) -
+	and few minor things here and there.
+
+2003-01-03 15:01  mokhov
+
+	* README, SpeakerIdentApp.java, testing.sh: Some clean up and
+	missing README in case someone are look at them...
+
+2002-12-17 01:48  mokhov
+
+	* speakers.txt: - more "correct" file	- No samples for Sadri	 -
+	EOL at EOF was missing
+
+2002-12-16 15:47  pwrslave
+
+	* testing-samples/vanh9.wav, testing-samples/rhcp9.wav,
+	speakers.txt: songs samples..for fun
+
+2002-12-16 15:43  pwrslave
+
+	* training-samples/: rhcp1.wav, rhcp2.wav, rhcp3.wav, rhcp4.wav,
+	rhcp5.wav, rhcp6.wav, rhcp7.wav, rhcp8.wav, vanh1.wav, vanh2.wav,
+	vanh3.wav, vanh4.wav, vanh5.wav, vanh6.wav, vanh7.wav, vanh8.wav:
+	songs samples..for fun
+
+2002-12-16 14:17  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: - new options for new filters
+
+2002-12-15 22:39  radarsat1
+
+	* SpeakerIdentApp.java: new graphs
+
+2002-12-15 18:50  radarsat1
+
+	* testing.sh: Fix.
+
+2002-12-15 17:42  mokhov
+
+	* Makefile, SpeakerIdentApp.java, SpeakersIdentDb.java, testing.sh:
+	Second Best implementation.
+
+2002-12-15 12:59  radarsat1
+
+	* speakers.txt, testing-samples/shabana8.wav,
+	training-samples/shabana1.wav, training-samples/shabana2.wav,
+	training-samples/shabana3.wav, training-samples/shabana4.wav,
+	training-samples/shabana5.wav, training-samples/shabana6.wav,
+	training-samples/shabana7.wav: Added my g/f...
+
+2002-12-14 21:52  radarsat1
+
+	* Makefile, speakers.txt, testing-samples/graham13.wav,
+	testing-samples/graham14.wav, testing-samples/steve-test1.wav,
+	testing-samples/steve-test2.wav, training-samples/graham1.wav,
+	training-samples/graham10.wav, training-samples/graham11.wav,
+	training-samples/graham12.wav, training-samples/graham2.wav,
+	training-samples/graham3.wav, training-samples/graham4.wav,
+	training-samples/graham5.wav, training-samples/graham6.wav,
+	training-samples/graham7.wav, training-samples/graham8.wav,
+	training-samples/graham9.wav, training-samples/steve-train1.wav,
+	training-samples/steve-train10.wav,
+	training-samples/steve-train11.wav,
+	training-samples/steve-train12.wav,
+	training-samples/steve-train2.wav,
+	training-samples/steve-train3.wav,
+	training-samples/steve-train4.wav,
+	training-samples/steve-train5.wav,
+	training-samples/steve-train6.wav,
+	training-samples/steve-train7.wav,
+	training-samples/steve-train8.wav: Updated some docs, plus added
+	samples of me & my brother.
+
+2002-12-14 00:09  pwrslave
+
+	* training-samples/: nick8.wav, nick9.wav: fixed nick8 and nick9
+
+2002-12-13 18:47  radarsat1
+
+	* testing.sh, training-samples/nick8.wav,
+	training-samples/nick9.wav: Updated FFT algorithm to use
+	overlapping Hamming windows.  Also improved TrainingSet to
+	differentiate properly between boost and non-boost training
+	samples.  nick8.wav and nick9.wav were empty, so I copied nick6.wav
+	and nick7.wav in order to stop them from generating errors.
+
+2002-12-13 18:26  mokhov
+
+	* speakers.txt, testing-samples/michelle1.wav,
+	training-samples/michelle10.wav, training-samples/michelle11.wav,
+	training-samples/michelle12.wav, training-samples/michelle13.wav,
+	training-samples/michelle14.wav, training-samples/michelle15.wav,
+	training-samples/michelle2.wav, training-samples/michelle3.wav,
+	training-samples/michelle4.wav, training-samples/michelle5.wav,
+	training-samples/michelle6.wav, training-samples/michelle7.wav,
+	training-samples/michelle8.wav, training-samples/michelle9.wav: -
+	one more speaker, sweet Michelle
+
+2002-12-13 13:09  mokhov
+
+	* speakers.txt, testing-samples/nick1.wav: Updated speakers.txt
+	with jim's friendd's samples   - moved nick1 into testing set TODO:
+	fo Jimmy-- update those sample that are of 0 length: 8 and 9
+
+2002-12-13 10:18  pwrslave
+
+	* training-samples/: jim10.wav, jim11.wav, jim12.wav, jim13.wav,
+	jim14.wav, jim15.wav, jim7.wav, jim8.wav, jim9.wav, nick10.wav,
+	nick2.wav, nick3.wav, nick4.wav, nick5.wav, nick6.wav, nick7.wav,
+	nick8.wav, nick9.wav: Some more samples of me and my friend..
+
+2002-12-12 21:20  mokhov
+
+	* speakers.txt, testing-samples/aihua5.wav,
+	training-samples/aihua1.wav, training-samples/aihua10.wav,
+	training-samples/aihua11.wav, training-samples/aihua12.wav,
+	training-samples/aihua13.wav, training-samples/aihua14.wav,
+	training-samples/aihua15.wav, training-samples/aihua2.wav,
+	training-samples/aihua3.wav, training-samples/aihua4.wav,
+	training-samples/aihua6.wav, training-samples/aihua7.wav,
+	training-samples/aihua8.wav, training-samples/aihua9.wav: Yet one
+	more speaker. 15 samples, from my grad project - Aihua Wu, she has
+	her thesis defense tomrrow, hence the contents :-)
+
+2002-12-12 11:13  mokhov
+
+	* speakers.txt: - jimmy's testing sample in speakers.txt
+
+2002-12-12 09:21  pwrslave
+
+	* testing-samples/jim6.wav: Testing sample of myself
+
+2002-12-12 00:33  mokhov
+
+	* testing.sh: - releasing whatever I hold before the docs
+
+2002-12-11 23:20  mokhov
+
+	* speakers.txt, testing.sh, testing-samples/rita6.wav,
+	training-samples/rita1.wav, training-samples/rita10.wav,
+	training-samples/rita11.wav, training-samples/rita12.wav,
+	training-samples/rita13.wav, training-samples/rita14.wav,
+	training-samples/rita15.wav, training-samples/rita2.wav,
+	training-samples/rita3.wav, training-samples/rita4.wav,
+	training-samples/rita5.wav, training-samples/rita7.wav,
+	training-samples/rita8.wav, training-samples/rita9.wav,
+	training-samples/sei-borg-detector-array.wav,
+	training-samples/sei-borg-torpedo-turret.wav,
+	training-samples/sei-colony-ship.wav,
+	training-samples/sei-diamond.wav,
+	training-samples/sei-diamond2.wav,
+	training-samples/sei-harmonic-defender.wav,
+	training-samples/sei-nexus.wav,
+	training-samples/sei-tech-assimilator.wav,
+	training-samples/sei-transwarp-gate.wav,
+	training-samples/serge-fed-adv-shipyard.wav,
+	training-samples/serge-fed-sci-station.wav,
+	training-samples/serge-fed-starbase.wav,
+	training-samples/serge-fed-trade-station.wav,
+	training-samples/serge-pulse-cannon.wav: - a "couple" more samples:
+	5 of myself, 9 of my bro, 15 of my mom
+
+2002-12-11 21:33  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, speakers.txt,
+	testing.sh, testing-samples/serge-label.wav: - quite suptsantial
+	recoding of speakers db - many changes to the app   - added --stats
+	option	 - expected files are part of the db and can be queried for
+	    and comapred   - records stats - yet more sample of me, somehow
+	was missing in testing-samples - neeed a testign sample of Jimmy -
+	improved testing.sh script, use --retrain option   to force
+	retriaining
+
+2002-12-11 17:08  mokhov
+
+	* testing-samples/jihed3.wav: - fixed format
+
+2002-12-11 03:17  mokhov
+
+	* SpeakerIdentApp.java, testing.sh: - a couple more variations -
+	with 'booster'
+
+2002-12-11 02:36  mokhov
+
+	* testing.sh, testing-samples/jihed3.wav: - i touched the script.
+	will do more to improve reporting   and add more options to cover
+	all we've got - one missing testing sample :-( - removed dupes
+	(were renamed to jihed* by Steve)
+
+2002-12-10 09:11  iclement
+
+	* testing.sh: DEV: Runs on all samples automatically! Nice output
+
+2002-12-08 18:21  mokhov
+
+	* testing-samples/suen2.wav, training-samples/suen1.wav,
+	training-samples/suen2.wav: Suen's sample
+
+2002-12-08 16:35  radarsat1
+
+	* SpeakerIdentApp.java, speakers.txt, testing.sh,
+	testing-samples/steve2.wav, training-samples/graham1.wav,
+	training-samples/jimmy1.wav, training-samples/jimmy2.wav,
+	training-samples/serguei1.wav,
+	training-samples/sergueiandhismom.wav, training-samples/steve1.wav:
+	More samples, and a testing script.
+
+2002-12-08 15:54  radarsat1
+
+	* training-samples/madhumita3.wav: 
+	Fixed... was 8-bit, converted to 16-bit.
+
+2002-12-08 15:03  radarsat1
+
+	* Makefile, speakers.txt, testing-samples/ira4.wav,
+	testing-samples/madhumita4.wav, training-samples/ira1.wav,
+	training-samples/ira2.wav, training-samples/ira3.wav,
+	training-samples/madhumita1.wav, training-samples/madhumita2.wav,
+	training-samples/madhumita3.wav: Yet more samples.
+
+2002-12-08 14:40  radarsat1
+
+	* speakers.txt, testing-samples/sei-sphere.wav,
+	training-samples/jihed1.wav, training-samples/jihed2.wav,
+	training-samples/sei-assimilator.wav,
+	training-samples/sei-cube.wav,
+	training-samples/sei-fusion-cube.wav,
+	training-samples/sei-tactical-cube.wav,
+	training-samples/sei-tactical-fusion-cube.wav,
+	training-samples/serge-family-cardholder.wav,
+	training-samples/serge-good-standing.wav,
+	training-samples/serge-insured-person.wav,
+	training-samples/serge-master-card.wav,
+	training-samples/serge-mysterious-disappearance.wav,
+	training-samples/serge-primary-cardholder.wav,
+	training-samples/serge-spouse.wav: New samples.
+
+2002-12-08 13:47  iclement
+
+	* SpeakerIdentApp.java: DEV: Added some NNet parametes
+
+2002-12-08 11:30  mokhov
+
+	* SpeakerIdentApp.java, speakers.txt: a couple more samples
+
+2002-12-08 09:41  mokhov
+
+	* Makefile, SpeakerIdentApp.java, SpeakersIdentDb.java: - added yet
+	one more classif disatnce - trun on debug output - comments
+
+2002-12-08 01:15  iclement
+
+	* testing-samples/ian15.wav: DEV: Added for testing!
+
+2002-12-08 01:14  iclement
+
+	* training-samples/: ian1.wav, ian10.wav, ian11.wav, ian12.wav,
+	ian13.wav, ian14.wav, ian2.wav, ian3.wav, ian4.wav, ian5.wav,
+	ian6.wav, ian7.wav, ian8.wav, ian9.wav: DEV: Recorded these of me @
+	8000Hz
+
+2002-12-07 23:15  radarsat1
+
+	* SpeakerIdentApp.java, SpeakerIdentApp.jpx: SpeakerIdentApp now
+	has command line parameters to be used for batch processing.
+
+2002-12-07 22:24  radarsat1
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, speakers.txt:
+	Euclidean classifier now implemented! Running SpeakerIdentApp now
+	identifies a speaker based on the training set.  Hurrah!
+
+2002-12-07 18:49  radarsat1
+
+	* SpeakerIdentApp.java, SpeakerIdentApp.jpx, SpeakersIdentDb.java,
+	speakers.txt: Updating training set implementation again.  Should
+	be everything.
+
+2002-12-07 13:48  radarsat1
+
+	* SpeakerIdentApp.jpx: 
+	Project file for SpeakerIdentApp
+
+2002-12-07 10:25  mokhov
+
+	* SpeakerIdentApp.java: - i broke it, i fix it :-)
+
+2002-12-06 18:22  radarsat1
+
+	* SpeakerIdentApp.java: 
+	Now calls MARF.train() successfully.
+
+2002-11-30 17:43  pwrslave
+
+	* training-samples/: jim1.wav, jim2.wav, jim3.wav, jim4.wav,
+	jim5.wav: Jimmy wave samples :)
+
+2002-11-24 03:24  mokhov
+
+	* Makefile, SpeakersIdentDb.java: FFT TEST APP FROM STEVE WAS
+	PORTED TO USE MARF!!! - make	       --- will compile - make run 
+	     --- compile if necessary and run - make clean     --- remove
+	junk - make maintainer-clean --- remove even more junk - classes
+	and marf install
+	
+	requires a compiled copy of marf within the dir or class path.
+	
+	Other changes - minor cleanup in our main app
+	
+	Next for me are port NN entirely, Wave and sample loading then docs
+
+2002-11-23 18:30  mokhov
+
+	* Makefile, SpeakerIdentApp.java, SpeakersIdentDb.java: - our app
+	made compile on top of framework   type   make install in marf/src
+	first	then   make --- to compile the app   make ident-run --- run
+	in ident. mode	 make train-run --- run in train mode - Still a lot
+	of implementation needs to be completed :-)
+
+2002-11-09 03:21  mokhov
+
+	* SpeakerIdentApp.java: Light app. update WRT the MARF changes,
+
+2002-10-20 20:18  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, speakers.txt: Initial
+	check in of the apps module with the first cut on our application
+
+2002-10-20 20:18  mokhov
+
+	* SpeakerIdentApp.java, SpeakersIdentDb.java, speakers.txt: Initial
+	revision
+

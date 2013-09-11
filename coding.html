@@ -1,0 +1,680 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+
+<head>
+	<title>Naming &amp; Coding Conventions</title>
+</head>
+
+
+<body bgcolor="white">
+
+<font face="Arial">
+
+<a name="top" id="top"></a>
+
+<h1>Naming &amp; Coding Conventions</h1>
+
+<p>
+	by Serguei A. Mokhov<br />
+	Some parts borrowed from <a href="http://www.merckfrosst.com" target="_blank">Merck Frosst</a>'s
+	<a href="http://www.merckfrosst.com/e/research/r_d/informatics.html" target="_blank">R.I.S.</a> Department Coding Conventions
+	by <a href="mailto:jean_marois@merck.com">Jean Marois</a>.
+</p>
+
+<p>$Revision: 1.1 $</p>
+<p>$Date: 2005/05/28 04:51:58 $</p>
+
+<h2>Table of Contents</h2>
+
+<ul>
+	<li><a href="#intro">Brief Intro</a></li>
+	<li><a href="#hungarian">Hungarian Notation</a></li>
+	<li><a href="#proposal">Project Coding Conventions</a>
+		<ul>
+			<li><a href="#class-names">Class Names</a></li>
+			<li><a href="#method-names">Method Names</a></li>
+			<li><a href="#variable-names">Variable Names</a></li>
+			<li><a href="#methods-vs-variables">Method Names vs. Variable Names</a></li>
+			<li><a href="#constants">Constants</a></li>
+			<li><a href="#other">Interfaces and Static (Class) Variables</a></li>
+		</ul>
+	</li>
+</ul>
+
+<a name="intro" id="intro"></a>
+<h2>Brief Intro</h2>
+
+<p>
+	This section describes our proposed common naming and coding conventions,
+	which all of us will follow in order to achieve consistency and
+	uniform style in our projects.
+	<br /><a href="#top">[TOP]</a>
+</p>
+
+<a name="hungarian" id="hungarian"></a>
+<h2>Hungarian Notation</h2>
+
+<p>
+	This technique makes programming easier, because it gives you a simple
+	mental machine for naming the things in your code.
+	A guy, Charles Simonyi, invented that technique that solves an old and
+	tiresome programming problem: "What am I going to name this variable?"
+	He realized that there are two important aspects to think about when
+	writing code: what a thing is, and what it means. To write good programs
+	in strongly-typed languages, you really need to keep both of these
+	things in mind. The "traditional" naming technique uses names that
+	emphasize what a thing means, requiring you to memorize its declaration
+	to remember what that thing is. While good in its intention of making
+	code "readable", this traditional kind of naming often results in two
+	things:
+</p>
+
+<ol>
+	<li>code that is understandable only by someone who is very determined, and</li>
+	<li>bugs.</li>
+</ol>
+
+<p>
+	Hungarian names have two parts. The prefix contains type information
+	specifying what this thing is, while the suffix contains descriptive
+	information specifying what it means. The prefix is composed of standard
+	elements that are the same for any program you write in a given
+	language. The suffix is composed of English words that tend to be
+	application-specific.
+</p>
+
+<p>
+	The prefix elements used here are not the only ones possible, but they
+	have some particularly nice properties. First, they are highly mnemonic,
+	so it's easy to remember what they mean. Second, they all consist of a
+	single or a few letters. This becomes important when multiple prefix elements are
+	composed in the same name. A prefix can show a lot of information in a
+	few characters, without possibility of confusion about how those
+	characters are associated.
+	<br /><a href="#top">[TOP]</a>
+</p>
+
+
+<a name="proposal" id="proposal"></a>
+<h2>Simplified Hungarian Notation for the Team</h2>
+
+	<h3>Common Naming Rules</h3>
+
+	<p>
+	  This proposed naming scheme is supposed to be used
+	  by everyone programming in Java to maintain consistency among the code base for 
+	  the projects where the Java programming language is used.
+	</p>
+
+	<a name="class-names" id="class-names"></a>
+	<h4>Class Names</h4>
+
+	<ol>
+	  <li>All names of all classes start with the capital letter;</li>
+	  <li>
+		If the class name is a multiword name, every single word
+		must be capitalized;
+	  </li>
+	</ol>
+
+	Examples:
+	<ul>
+	  <li>class Gun {}</li>
+	  <li>class ThisIsMyClass {}</li>
+	  <li>class AbstractSyntaxTree {}</li>
+	  <li>class Dictionary {}</li>
+	</ul>
+
+	<a name="method-names" id="method-names"></a>
+	<h4>Method Names</h4>
+
+	<ol>
+	  <li>
+		First letter of every user-defined function is in lower case;
+	  </li>
+	  <li>
+		If the function's name has multiple words every other word should
+		be capitalized;
+	  </li>
+	  <li>
+		For getters and setters (class methods that set or
+		return data members of the class) should have <b>get</b> and
+		<b>set</b> prefixes, and after property name starting with
+		capital letter;
+	  </li>
+	  <li>
+		Name of the function has to have a meaning, obviously.
+	  </li>
+	</ol>
+
+	Examples:
+	<ul>
+	  <li><code>getStudentName();</code> - is a getter, where <code>strStudentName</code> is a data member of a given class;</li>
+	  <li><code>crashWindows();</code></li>
+	  <li><code>die();</code></li>
+	  <li><code>setMoney(Money poMoney);</code></li>
+	</ul>
+
+	<a name="variable-names" id="variable-names"></a>
+	<h4>Variable Names</h4>
+
+	<ol>
+	  <li>
+		Each variable starts with a special prefix indicating <b>variable's scope</b>.
+		<br /><br />
+		There four special prefixes in the <b>"classical"</b> form. First,
+		I will present the classical form, and then will adapt it for Java.
+
+		<table border="1">
+			<tr>
+			  <th>Prefix</th>
+			  <th>Description</th>
+			</tr>
+			<tr>
+			  <td><b>m_</b></td>
+			  <td>The prefix denotes a <b>m</b>ember variable of a class.</td>
+			</tr>
+			<tr>
+			  <td><b>p_</b></td>
+			  <td>
+				This prefix shows that the variable is a <b>p</b>arameter in the function's signature.
+			  </td>
+			</tr>
+			<tr>
+			  <td><b>l_</b></td>
+			  <td>
+				This prefix is used for the <b>l</b>ocal scope variables
+				(e.g. inside a function)
+			  </td>
+			</tr>
+			<tr>
+			  <td><b>g_</b></td>
+			  <td>
+				This prefix describes variables belonging to the
+				<b>g</b>lobal scope.
+			  </td>
+		  </tr>
+		</table>
+		<BR />
+		<BR />
+
+		<b>Modifications for Java</b>:
+
+		<ul>
+			<li>Since in Java we don't really have the global scope, we can drop the "g_" prefix.
+			</li>
+			<li>Additionally, to distinguish the member and local variables, it is proposed to use
+				the following: drop "l_" from the local variables and assume a variable to be local
+				if it has no prefix.
+			</li>
+			<li>For member variables we will explicitly prefix them with
+				"<code>this.</code>".
+			</li>
+			<li>The last simplification would be to drop the underscore from "p_", but a
+				variable name still should have a letter <b>p</b> to indicate
+				that this variable is a parameter variable. E.g. <code>piID</code> in <code>getProductInfo(int piID)</code>.
+			</li>
+		</ul>
+	  </li>
+
+	  <li>
+		The next part of the variable name is its <b>type</b>. This is
+		especially useful for the languages where the data type
+		doesn't really exists like PHP, PERL, and JavaScript, and
+		it might not be clear from the variable's declaration
+		what type of value it has. In addition, specifying the
+		type improves readability of the code and reduces number
+		of bugs related to misinterpretation of the variable's value
+		type.
+		<br /><br />
+		For the
+		primitive data types (like integer, floating point, character, Boolean, etc.) we'll
+		use one letter (i, f, c, b respectively). The more complete list
+		provided below:
+
+		<table border="1">
+			<tr>
+			  <th>Letter</th>
+			  <th>Type</th>
+			</tr>
+			<tr>
+			  <td>i</td>
+			  <td><code>int</code></td>
+			</tr>
+			<tr>
+			  <td>l</td>
+			  <td><code>long</code></td>
+			</tr>
+			<tr>
+			  <td>f</td>
+			  <td><code>float</code>; floating point, single precision</td>
+			</tr>
+			<tr>
+			  <td>d</td>
+			  <td><code>double</code>; floating point with double precision</td>
+			</tr>
+			<tr>
+			  <td>c</td>
+			  <td><code>char</code></td>
+			</tr>
+			<tr>
+			  <td>b</td>
+			  <td><code>boolean</code></td>
+			</tr>
+			<tr>
+			  <td>t</td>
+			  <td><code>byte</code></td>
+			</tr>
+		</table>
+
+		<br />
+		For more complex data structures, such as arrays, character strings and different
+		types of objects we'll use the following:
+
+		<ul type="disc">
+		  <li>
+			Array data type is denoted by the letter &quot;<b>a</b>&quot;
+			followed by the type of elements of this array.
+		  </li>
+		  <li>
+			Arbitrary <b>o</b>bjects</a> created using user-generated classes are
+			denoted by the letter &quot;<b>o</b>&quot; followed by
+			full or partial (but clearly identifying) class name.
+		  </li>
+		<li>
+			For the String data type we'll use three-letter notation <b>str</b>.
+		</li>
+		</ul>
+
+		<p>
+		  After all type identifications some (logical) wordings may follow to
+		  distinguish variables of the same type in the same scope.
+		</p>
+
+		<p>
+		  Examples:
+		<table border="1">
+			<tr>
+			  <th>Variable Name</th>
+			  <th>Meaning</th>
+			</tr>
+			<tr>
+			  <td><code>iIndex</code></td>
+			  <td>
+				This is a local variable of an int type, named Index.
+			  </td>
+			</tr>
+			<tr>
+			  <td><code>oGun</code></td>
+			  <td>
+				This is a local variable of type of an
+				object of class Gun.
+			  </td>
+			</tr>
+			<tr>
+			  <td><code>this.acMyCharArray</code></td>
+			  <td>
+				This is an array of characters named
+				MyCharArray, which is a member variable.
+			  </td>
+			</tr>
+			<tr>
+			  <td><code>poGunRevolver</code></td>
+			  <td>
+				This is a parameter variable passed to a function of
+				type of object Gun, named Revolver<br />
+				(<code>void myFunc(Gun poGunRevolver) {}</code>)
+			  </td>
+			</tr>
+			<tr>
+			  <td><code>strError</code></td>
+			  <td>
+				This is a character string variable named Error.
+			  </td>
+			</tr>
+		</table>
+	  </p>
+	  </li>
+	</ol>
+
+	<a name="methods-vs-variables" id="methods-vs-variables"></a>
+	<h4>Method Names vs. Variable Names</h4>
+
+	Variable names are not at all similar to the method names for the following
+	reasons: the ALWAYS have different prefixes -- the variables have the scope and the
+	type, where 99% methods begin with an English word and have no typing information
+	in them. Additionally, method calls always have parentheses "(" and ")", so no confusion
+	there can possibly be.
+
+	<a name="constants" id="constants"></a>
+	<h4>Constants</h4>
+	<p>
+		Constants may follow the same rules as the variables as far as prefixes concerned (optionally),
+		and usually are CAPITALIZED. Every other word in the case of a multiword constant
+		(and with capitalization) must be separated with underscores "_".
+		<br />
+		<br />
+		E.g.: <code>public static final int DEFAULT_NUMBER_OF_WORKERS = 13;</code>
+	</p>
+
+	<h4>Other Coding Conventions</h4>
+
+	<ul>
+	  <li>
+		<b>Class Structure</b>
+		<p>
+		  Each class has to have the following structure:
+		<pre>
+
+/**
+ * javadoc comment goes here to describe the class
+ * @author Serguei A. Mokhov
+ * @since 1.0
+ * @version $Revision: 1.1 $ $Date: 2005/05/28 04:51:58 $
+ */
+class MyClass [ extends WhateverClass ] [ implements WhateverInterface ]
+{
+	/*
+	 * ------------
+	 * Data Members
+	 * ------------
+	 */
+
+	/**
+	 * Just a Name
+	 */
+	private String strName;
+
+	/*
+	 * ---------------
+	 * Object Lifetime
+	 * ---------------
+	 */
+
+	/**
+	 * Constructor
+	 */
+	public MyClass()
+	{
+	}
+
+	/**
+	 * Performs some cleanup, e.g. closing files/releasing resources
+	 */
+	private void cleanUp()
+	{
+	}
+
+
+	/*
+	 * -----------------
+	 * Getters / Setters
+	 * -----------------
+	 */
+
+	/**
+	 * Retrieves name
+	 * @return Name of the object, <code>String</code>
+	 */
+	public final String getName()
+	{
+		return this.strName;
+	}
+
+	/**
+	 * Sets the name of the object. Name must not be empty.
+	 * @param pstrName Name of the object
+	 * @exception RuntimeException thrown if the name is an empty string
+	 */
+	public final void setName(final String pstrName) throws RuntimeException
+	{
+		if(pstrName == null || pstrName.equals(""))
+			throw new RuntimeException("Name cannot be empty.");
+
+		this.strName = pstrName;
+	}
+
+	/*
+	 * ----------------
+	 * Public Interface
+	 * ----------------
+	 */
+
+	/**
+	 * Computes something of extreme importance
+	 */
+	public void computeSomething()
+	{
+	}
+}
+		</pre>
+		</p>
+	  </li>
+	  <li>
+		<b>Bracketing</b>
+		<p>
+		  Opening and closing scope (curly) brackets should be at the same
+		  indentation interval, one under another:
+		<pre>
+void blah()
+{
+	for(;;)
+	{
+		if()
+		{
+			...
+		}
+		else
+		{
+			...
+		}
+	}
+}
+		</pre>
+		</p>
+	  </li>
+
+	  <li>
+		<b>Indentation &amp; Spacing</b>
+		<ul>
+		  <li>
+			Each beginning and ending of a scope should have some
+			indentation interval (i.e. size of tab symbol; see the
+			example above).
+
+			Source code formatting uses a 4 column tab spacing, currently with
+    		tabs preserved (i.e. tabs are not expanded to spaces).
+			<br /><br />
+			<font color="red">[INSERT on HOW TO SET 4-SPACE TABS in different IDEs HERE]</font>
+			<br /><br />
+		  </li>
+		  <li>
+			There should be at least one space line before each scope
+			if there are many <code>for()</code> or <code>while()</code> loops for example, or
+			<code>if()</code> statements.
+		  </li>
+		</ul>
+		<br />
+	  </li>
+	  <li>
+		<b>Comments</b>
+		<p>
+		  Comments should be meaningful and precede the line they are
+		  referring to; they should <b>not</b> be on the same line.
+		</p>
+	  </li>
+	</ul>
+
+	<p>
+	  <b>Putting all together:</b>
+	</p>
+
+	<font face="Courier">
+	<pre>
+/**
+ * Class Gun that fires.
+ * Provides ability to set index and fire.
+ * @author Gun Shop
+ * @version $Revision: 1.1 $
+ * @since 1.2.3
+ */
+class Gun
+{
+	/*
+	 * -----------------
+	 * Getters / Setters
+	 * -----------------
+	 */
+
+	/**
+	 * Last Error Occurred.
+	 */
+	private String strError;
+
+	/**
+	 * Serial Index of the Weapon (if such exists :)).
+	 */
+	private int iIndex;
+
+
+	/*
+	 * ---------------
+	 * Object Lifetime
+	 * ---------------
+	 */
+
+	/**
+	 * Constructor.
+	 * @param piIndex Serial number of the gun
+	 */
+	public Gun(final int piIndex)
+	{
+		setIndex(piIndex);
+	}
+
+
+	/*
+	 * -----------------
+	 * Getters / Setters
+	 * -----------------
+	 */
+
+	/**
+	 * Retrieves the serial index of the weapon.
+	 * @return Gun's serial index
+	 */
+	public final int getIndex()
+	{
+		return this.iIndex;
+	}
+
+	/**
+	 * Sets the serial index of the weapon.
+	 * @param piIndex Gun's serial index
+	 */
+	public final void setIndex(final int piIndex)
+	{
+		this.iIndex = piIndex;
+	}
+
+	/**
+	 * Retrieves the error message of the last error occurred.
+	 * @return Last error message string
+	 */
+	public final String getError()
+	{
+		return this.strError;
+	}
+
+
+	/*
+	 * ----------------
+	 * Public Interface
+	 * ----------------
+	 */
+
+	/**
+	 * Fires the gun.
+	 */
+	public void fire()
+	{
+	}
+}
+
+/**
+ * Main startup module.
+ */
+public class Main
+{
+	/**
+	 * Important array of integers shared among all class
+	 * instances.
+	 */
+	private static int[] saiMyIntArray = {1, 2, 3, 4, 5, 6, 7};
+
+	/**
+	 * argv here left as-is for historical reasons, but may
+	 * be changed to pastrCommandLineArgs or whatever plausible
+	 * replacement is.
+	 * @param argv command line arguments vector
+	 */
+	public static void main(String[] argv)
+	{
+		new Main().use(new Gun());
+	}
+
+	public void use(Gun poGun)
+	{
+		//...
+		poGun.fire();
+		//...
+	}
+
+	public void errorHandler(int piErrorID)
+	{
+		//...
+	}
+}
+	</pre>
+  </font>
+
+<br /><a href="#top">[TOP]</a>
+
+<a name="other" id="other"></a>
+<h2>Static (Class) Variables and Interfaces</h2>
+
+<ol>
+	<li>
+		<b>Static variables.</b> Static (a.k.a class) variables cannot
+		be referred to as members even though they are defined within the class'
+		scope, so no "<code>this.</code>" prefix can be used. However, if we
+		omit the prefix, it will look like as if we are using local variables
+		inside our methods.
+		Therefore, we will use the "s" prefix for statics as we do use "p" for
+		parameter variables.
+
+		Examples: <code>private static sstrFormName = "";</code>,
+		<code>public static int siNextTID = 1;</code>
+	</li>
+	<li>
+		<b>Interface Names.</b> There's a common convention to place
+		"I" before an Interface, like in
+		<code><b>I</b>CommunicationProcedure</code>, so we will use
+		that for interfaces.
+	</li>
+</ol>
+
+<hr noshade="noshade /">
+
+<p>
+	This document was created by Serguei Mokhov on June 3, 2003
+	<br />
+	Last updated: $Date: 2005/05/28 04:51:58 $
+</p>
+
+</body>
+</html>

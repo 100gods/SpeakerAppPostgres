@@ -1,0 +1,17 @@
+$Header: /cvsroot/marf/apps/SpeakerIdentApp/training-samples/README,v 1.1 2003/02/01 15:07:01 mokhov Exp $
+
+This directory is supposed to contain WAV files
+(*.wav) for TRAINING a trained system. There may
+also be some generated files, like PPM or CSV
+text files with wave graphs (-graph) or
+spectrograms (-spectrogram) if such options were
+specified to the application.
+
+If you add a file here, don't forget to update
+the speakers.txt file one level up; otherwise,
+the file won't be processed.
+
+This README is primarily here for the directory
+to 100% exist when distributed w/o samples. :-)
+
+EOF
